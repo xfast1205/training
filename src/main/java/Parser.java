@@ -31,11 +31,23 @@ public class Parser {
         throw new Exception("Can't extract date!");
     }
 
-    private static void printFoValues(Elements values, int index){                                  //index - начало печати
-        for (int i = 0; i < 4; i++) {
-            Element valueLine = values.get(index);
-
+    private static int printPartValues(Elements values, int index){                      //index - начало печати
+        int iterationCount = 4;
+        if (index == 0){
+            Element valueLn = values.get(3);
+            boolean isMorning = valueLn.text().contains("Утро");
+            if (isMorning){
+                iterationCount = 3;
+            }
         }
+        for (int i = 0; i < iterationCount; i++) {
+            Element valueLine = values.get(index + i);
+            for (Element td : valueLine.select("td")) {
+                System.out.print(td.text() + "    ");
+            }
+            System.out.println();
+            }
+        return iterationCount;
     }
 
     public static void main(String[] args) {
@@ -54,7 +66,8 @@ public class Parser {
                 e.printStackTrace();
             }
             System.out.println(date + "    Явления    Температура    Давление    Влажность    Ветер");
+            int iterationCount = printPartValues(values, index);
+            index += iterationCount;
         }
-
     }
 }
